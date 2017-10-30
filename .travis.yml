@@ -1,0 +1,36 @@
+sudo: false
+language: python
+python:
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.6'
+- '3.7-dev'
+- 'pypy'
+- 'pypy3'
+install:
+  - pip install pybuilder
+  - pyb install_dependencies --verbose
+script:
+  - pyb --debug
+deploy:
+  - provider: pypi
+    user: AlexeySanko
+    server: https://upload.pypi.org/legacy/
+    password:
+      secure: XTmPIgFuOeCijV0HZ1CTt7GZ8La3DYRNvlkVBrVn+5k0zpFLh8zH7qLJM5RxW8Z1td+xkeVYMrKaJF+7yCjRfH6Fg+v/fgF8guROAInwoMLW98/HpBR2kZFAkDco47R5W3+xAqCHOwxCWEwCDRDH2xcRuauoZiUftTRJ5PLBWSA0kXuY9uo5WiGiL2EL97LgAFloL+VPIUMqaYw2TGDN4qkcx2h/+vbh0aXObZRTE/3AdGXA7uI3H/nEoN5EVcB5SnSe0WGvu9vFHUwirMuk4XWNwU15fOEqkOIQgjqOGlkfsFSE0hLFgbasGCDuFLezB1Z10yiCt6v+ob2aA5h+qVu23IMHthRW5gTTJD++IQ2Sdq0F67b+eYafWdBrcDFYz2SgJ/VFta0Kaqaza+UCcLcRgIT67roaTRH8t8Y2yHBamoWuPyjwZUz/u+oM131VfKoxCva6XhliYaRx9vDh5Kx8ioRlwTAqXkaLs1YZlyFeb0G42B5CxpnWASXUQ1YY7HaXBbeBXGLu7QKZ6JlEG7Xt3VPtqU872kVMKGtoidlYJhx0zxHK0xDwgkxjSQoacKGqeder25erQnu0QX6/qzCV/Qdm5cgciN5Kh8u63EPQETqPIGYMavhfFZ4mtRS+i/yQDCOIXrw/XV9OrQKqIXtQAYmBLht+NvLK0N3n8yM=
+    on:
+      tags: true
+      python: '2.7'
+      repo: AlexeySanko/pybuilder_pylint_extended
+    distributions: bdist_wheel
+  - provider: pypi
+    user: AlexeySanko
+    server: https://upload.pypi.org/legacy/
+    password:
+      secure: XTmPIgFuOeCijV0HZ1CTt7GZ8La3DYRNvlkVBrVn+5k0zpFLh8zH7qLJM5RxW8Z1td+xkeVYMrKaJF+7yCjRfH6Fg+v/fgF8guROAInwoMLW98/HpBR2kZFAkDco47R5W3+xAqCHOwxCWEwCDRDH2xcRuauoZiUftTRJ5PLBWSA0kXuY9uo5WiGiL2EL97LgAFloL+VPIUMqaYw2TGDN4qkcx2h/+vbh0aXObZRTE/3AdGXA7uI3H/nEoN5EVcB5SnSe0WGvu9vFHUwirMuk4XWNwU15fOEqkOIQgjqOGlkfsFSE0hLFgbasGCDuFLezB1Z10yiCt6v+ob2aA5h+qVu23IMHthRW5gTTJD++IQ2Sdq0F67b+eYafWdBrcDFYz2SgJ/VFta0Kaqaza+UCcLcRgIT67roaTRH8t8Y2yHBamoWuPyjwZUz/u+oM131VfKoxCva6XhliYaRx9vDh5Kx8ioRlwTAqXkaLs1YZlyFeb0G42B5CxpnWASXUQ1YY7HaXBbeBXGLu7QKZ6JlEG7Xt3VPtqU872kVMKGtoidlYJhx0zxHK0xDwgkxjSQoacKGqeder25erQnu0QX6/qzCV/Qdm5cgciN5Kh8u63EPQETqPIGYMavhfFZ4mtRS+i/yQDCOIXrw/XV9OrQKqIXtQAYmBLht+NvLK0N3n8yM=
+    on:
+      tags: true
+      python: '3.6'
+      repo: AlexeySanko/pybuilder_pylint_extended
+    distributions: bdist_wheel
