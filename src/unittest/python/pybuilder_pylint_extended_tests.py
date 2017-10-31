@@ -147,8 +147,11 @@ class PylintPluginExecutionTests(TestCase):
         """ Test that plugin breaks build if fatal or error
             were found"""
         logger_mock = mock.Mock()
-        self.assertRaises(BuildFailedException, execute_pylint,
-                          self.project, logger_mock)
+        with self.assertRaises(BuildFailedException) as context:
+            execute_pylint(self.project, logger_mock)
+        err_msg = str(context.exception)
+        self.assertTrue(
+            "pylint found 1 fatal(s) and 1 error(s)" in err_msg)
         mock_run.assert_called_once_with(
             [self.source_file, self.unit_file, self.intg_file, self.pytest_file,
              self.script_file, '--max-line-length=80', '--disable=some-error',
@@ -169,8 +172,12 @@ class PylintPluginExecutionTests(TestCase):
             if warning/convention/refactoring were found"""
         self.project.set_property("pylint_break_build", True)
         logger_mock = mock.Mock()
-        self.assertRaises(BuildFailedException, execute_pylint,
-                          self.project, logger_mock)
+        with self.assertRaises(BuildFailedException) as context:
+            execute_pylint(self.project, logger_mock)
+        err_msg = str(context.exception)
+        self.assertTrue(
+            ("pylint found 1 warning(s), 1 refactor(s) "
+             "and 1 convention(s)") in err_msg)
         mock_run.assert_called_once_with(
             [self.source_file, self.unit_file, self.intg_file, self.pytest_file,
              self.script_file, '--max-line-length=80', '--disable=some-error',
@@ -188,8 +195,11 @@ class PylintPluginExecutionTests(TestCase):
             than threshold"""
         self.project.set_property("pylint_score_threshold", 10)
         logger_mock = mock.Mock()
-        self.assertRaises(BuildFailedException, execute_pylint,
-                          self.project, logger_mock)
+        with self.assertRaises(BuildFailedException) as context:
+            execute_pylint(self.project, logger_mock)
+        err_msg = str(context.exception)
+        self.assertTrue(
+            "pylint current score -20.0 less then threshold 10" in err_msg)
         logger_mock.debug.assert_called_once()
         logger_mock.info.assert_called_with(
             "Pylint results: score:-20.0, fatal:0, error:0, "
