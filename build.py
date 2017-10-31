@@ -75,5 +75,4 @@ def version_from_git_tag(project, logger):
     # Eating your own dog food
     import pybuilder_pylint_extended
     pybuilder_pylint_extended.initialize_pylint_plugin(project)
-    project.set_property("pylint_break_build", True)
     pybuilder_pylint_extended.execute_pylint(project, logger)
