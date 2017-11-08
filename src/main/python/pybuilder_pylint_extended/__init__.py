@@ -25,9 +25,12 @@ from pybuilder.errors import BuildFailedException
 from pybuilder.plugins.python import (
     python_plugin_helper as pybuilder_python_plugin_helper)
 from pylint import lint
-from pybuilder_pylint_extended import python_plugin_helper
+from pybuilder_pylint_extended import (
+    python_plugin_helper,
+    version)
 
 __author__ = 'Alexey Sanko'
+__version__ = version.__version__
 
 core.use_plugin("python.core")
 core.use_plugin("analysis")
