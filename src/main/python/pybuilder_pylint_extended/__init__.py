@@ -44,6 +44,7 @@ def initialize_pylint_plugin(project):
     project.set_property_if_unset("pylint_break_build", False)
     project.set_property_if_unset("pylint_ignore", [])
     project.set_property_if_unset("pylint_max_line_length", 80)
+    project.set_property_if_unset("pylint_include_files", [])
     project.set_property_if_unset("pylint_exclude_patterns", None)
     project.set_property_if_unset("pylint_include_test_sources", True)
     project.set_property_if_unset("pylint_include_scripts", False)
@@ -89,8 +90,13 @@ def execute_pylint(project, logger):
     files = python_plugin_helper.discover_affected_files(
         project.get_property("pylint_include_test_sources"),
         project.get_property("pylint_include_scripts"), project)
+    # collect additionally included files
+    included_files = [project.expand_path(file_name)
+                      for file_name
+                      in project.get_property("pylint_include_files")]
     # add files to arguments
-    pylint_args = [f for f in files] + pylint_args
+    pylint_args = ([file_name for file_name in files]
+                   + included_files + pylint_args)
     logger.debug("Calling pylint with: %s", pylint_args)
     # replace stdout/stderr with report files
     prev_stdout, prev_stderr = sys.stdout, sys.stderr

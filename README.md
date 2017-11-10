@@ -24,6 +24,7 @@ Plugin has next properties with provided defaults
 | pylint_break_build | bool | False | Breaks build on any warnings/refactors/convention |
 | pylint_ignore | list of symbolic names | [] | List of issues symbolic name for excluding |
 | pylint_max_line_length | integer | 80 | Maximum row length |
+| pylint_include_files | list of string | [] | List of files with relative path according project root directory which could be added to parsed |
 | pylint_exclude_patterns | regex string | None | Pattern for excluding files from analysis |
 | pylint_include_test_sources | bool | True | Include tests sources |
 | pylint_include_scripts | bool | False | Include scripts |

@@ -47,6 +47,7 @@ class PylintPluginInitializationTests(TestCase):
             "pylint_break_build": False,
             "pylint_ignore": [],
             "pylint_max_line_length": 80,
+            "pylint_include_files": [],
             "pylint_include_test_sources": True,
             "pylint_include_scripts": False,
             "pylint_score_threshold": None,
@@ -65,6 +66,7 @@ class PylintPluginInitializationTests(TestCase):
             "pylint_break_build": True,
             "pylint_ignore": ['a'],
             "pylint_max_line_length": 90,
+            "pylint_include_files": ['a', 'b'],
             "pylint_include_test_sources": False,
             "pylint_include_scripts": True,
             "pylint_score_threshold": 10.0,
@@ -101,6 +103,10 @@ class PylintPluginExecutionTests(TestCase):
         self.project.set_property("verbose", True)
         self.project.get_property("pylint_ignore").append('some-error')
         self.project.get_property("pylint_ignore").append('some-warning')
+        self.project.get_property(
+            "pylint_include_files").append('additional1.py')
+        self.project.get_property(
+            "pylint_include_files").append('resources/additional2.py')
         self.project.set_property("pylint_exclude_patterns",
                                   "test.*?py")
         self.project.get_property("pylint_extra_args").append("--score=y")
@@ -113,6 +119,13 @@ class PylintPluginExecutionTests(TestCase):
         self.project.set_property("pylint_include_scripts", True)
         self.project.set_property("dir_source_main_scripts", "scripts")
         self.project.set_property("dir_reports", "reports")
+        # add additional files
+        self.additional_file1 = path.join(self.basedir, 'additional1.py')
+        _write_stub_file(self.additional_file1)
+        additional_dir = path.join(self.basedir, 'resources')
+        os.makedirs(additional_dir)
+        self.additional_file2 = path.join(additional_dir, 'additional2.py')
+        _write_stub_file(self.additional_file2)
         # add source file
         pkg_dir = path.join(self.basedir, 'main', 'pkg')
         os.makedirs(pkg_dir)
@@ -154,7 +167,8 @@ class PylintPluginExecutionTests(TestCase):
             "pylint found 1 fatal(s) and 1 error(s)" in err_msg)
         mock_run.assert_called_once_with(
             [self.source_file, self.unit_file, self.intg_file, self.pytest_file,
-             self.script_file, '--max-line-length=80', '--disable=some-error',
+             self.script_file, self.additional_file1, self.additional_file2,
+             '--max-line-length=80', '--disable=some-error',
              '--disable=some-warning', "--ignore-patterns=test.*?py",
              '--score=y'])
         logger_mock.debug.assert_called_once()
@@ -178,11 +192,6 @@ class PylintPluginExecutionTests(TestCase):
         self.assertTrue(
             ("pylint found 1 warning(s), 1 refactor(s) "
              "and 1 convention(s)") in err_msg)
-        mock_run.assert_called_once_with(
-            [self.source_file, self.unit_file, self.intg_file, self.pytest_file,
-             self.script_file, '--max-line-length=80', '--disable=some-error',
-             '--disable=some-warning', "--ignore-patterns=test.*?py",
-             '--score=y'])
         logger_mock.debug.assert_called_once()
         logger_mock.info.assert_called_with(
             "Pylint results: score:10, fatal:0, error:0, "
@@ -203,9 +212,9 @@ class PylintPluginExecutionTests(TestCase):
         logger_mock.debug.assert_called_once()
         logger_mock.info.assert_called_with(
             "Pylint results: score:-20.0, fatal:0, error:0, "
-            "warning:5, refactor:0, convention:10")
+            "warning:7, refactor:0, convention:14")
         self.assertEqual(logger_mock.info.call_count, 2)
-        self.assertEqual(logger_mock.warn.call_count, 22)
+        self.assertEqual(logger_mock.warn.call_count, 30)
 
     def tearDown(self):
         shutil.rmtree(self.basedir)
