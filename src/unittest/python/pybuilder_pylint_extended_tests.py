@@ -212,9 +212,9 @@ class PylintPluginExecutionTests(TestCase):
         logger_mock.debug.assert_called_once()
         logger_mock.info.assert_called_with(
             "Pylint results: score:-20.0, fatal:0, error:0, "
-            "warning:7, refactor:0, convention:14")
+            "warning:4, refactor:0, convention:8")
         self.assertEqual(logger_mock.info.call_count, 2)
-        self.assertEqual(logger_mock.warn.call_count, 30)
+        self.assertEqual(logger_mock.warn.call_count, 20)
 
     def tearDown(self):
         shutil.rmtree(self.basedir)

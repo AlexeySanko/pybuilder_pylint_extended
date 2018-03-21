@@ -59,6 +59,9 @@ def set_properties(project):
     # pylint
     project.set_property("pylint_options", ["--max-line-length=80"])
 
+    # semver git tag
+    project.set_property('semver_git_tag_changelog', 'CHANGELOG.md')
+
     # distutils
     project.set_property('distutils_commands', ['bdist_wheel'])
     project.set_property('distutils_classifiers', [
